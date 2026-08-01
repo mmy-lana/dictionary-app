@@ -1,42 +1,56 @@
-# sv
+# 📖 The Dictionary — Editorial Audio Reference
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A refined, editorial dictionary web application featuring resilient multi-tier audio pronunciations, clean serif typography, and real-time word lookups.
 
-## Creating a project
+🚀 **Live Demo**: [https://dictionary-app-omega-eight.vercel.app](https://dictionary-app-omega-eight.vercel.app)
 
-If you're seeing this, you've probably already done this step. Congrats!
+---
 
-```sh
-# create a new project
-npx sv create my-app
+## ✨ Features
+
+- 📰 **Editorial Aesthetic**: Paper-white background `#FDFBF7`, high-contrast serif typography, and crisp borders.
+- 🔊 **Resilient Audio Pronunciation Pipeline**:
+  1. **Primary**: High-quality MP3 audio from the Free Dictionary API.
+  2. **Secondary Fallback**: Server-side proxy endpoint (`/api/audio`) routing Google TTS requests to bypass browser CORS/404 blocks.
+  3. **Tertiary Fallback**: Native browser Web Speech API (`window.speechSynthesis`).
+- 📚 **Multi-Entry Word Consolidation**: Merges homonyms, multiple parts of speech (`noun`, `verb`, `adjective`), and duplicate phonetics into a single cohesive view.
+- 🔗 **Interactive Navigation**: Clickable synonyms and antonyms for instant cross-reference lookups.
+- ⚡ **Search History & Shortcuts**: Remembers recent lookups with `Escape` key shortcut support.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: SvelteKit (Svelte 5 Runes)
+- **Styling**: Tailwind CSS v4 (`@tailwindcss/vite`)
+- **Language**: TypeScript
+- **Deployment**: Vercel (`@sveltejs/adapter-vercel`)
+
+---
+
+## 🚀 Local Development
+
+### 1. Clone & Install Dependencies
+```bash
+git clone https://github.com/your-username/dictionary-app.git
+cd dictionary-app
+npm install
 ```
 
-To recreate this project with the same configuration:
-
-```sh
-# recreate this project
-npx sv@0.17.0 create --template minimal --types ts --install npm dictionary-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+### 2. Start Development Server
+```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
+Open `http://localhost:5173` in your browser.
 
-## Building
-
-To create a production version of your app:
-
-```sh
+### 3. Build & Preview Production
+```bash
 npm run build
+npm run preview
 ```
 
-You can preview the production build with `npm run preview`.
+---
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## 📄 License
+
+MIT
