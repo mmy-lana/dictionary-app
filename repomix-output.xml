@@ -1,0 +1,1142 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+src/
+  lib/
+    assets/
+      favicon.svg
+    components/
+      dictionary/
+        DefinitionList.svelte
+        PhoneticBadge.svelte
+        SearchBar.svelte
+        WordHeader.svelte
+      ui/
+        AudioPlayer.svelte
+        Button.svelte
+        Input.svelte
+    services/
+      dictionaryApi.ts
+    types/
+      dictionary.ts
+    utils/
+      audio.ts
+    index.ts
+  routes/
+    api/
+      dictionary/
+        +server.ts
+    +layout.svelte
+    +page.svelte
+  app.css
+  app.d.ts
+  app.html
+static/
+  robots.txt
+.gitignore
+.npmrc
+package.json
+README.md
+svelte.config.js
+tsconfig.json
+vite.config.ts
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="src/app.css">
+@import "tailwindcss";
+</file>
+
+<file path="src/lib/assets/favicon.svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="107" height="128" viewBox="0 0 107 128"><title>svelte-logo</title><path d="M94.157 22.819c-10.4-14.885-30.94-19.297-45.792-9.835L22.282 29.608A29.92 29.92 0 0 0 8.764 49.65a31.5 31.5 0 0 0 3.108 20.231 30 30 0 0 0-4.477 11.183 31.9 31.9 0 0 0 5.448 24.116c10.402 14.887 30.942 19.297 45.791 9.835l26.083-16.624A29.92 29.92 0 0 0 98.235 78.35a31.53 31.53 0 0 0-3.105-20.232 30 30 0 0 0 4.474-11.182 31.88 31.88 0 0 0-5.447-24.116" style="fill:#ff3e00"/><path d="M45.817 106.582a20.72 20.72 0 0 1-22.237-8.243 19.17 19.17 0 0 1-3.277-14.503 18 18 0 0 1 .624-2.435l.49-1.498 1.337.981a33.6 33.6 0 0 0 10.203 5.098l.97.294-.09.968a5.85 5.85 0 0 0 1.052 3.878 6.24 6.24 0 0 0 6.695 2.485 5.8 5.8 0 0 0 1.603-.704L69.27 76.28a5.43 5.43 0 0 0 2.45-3.631 5.8 5.8 0 0 0-.987-4.371 6.24 6.24 0 0 0-6.698-2.487 5.7 5.7 0 0 0-1.6.704l-9.953 6.345a19 19 0 0 1-5.296 2.326 20.72 20.72 0 0 1-22.237-8.243 19.17 19.17 0 0 1-3.277-14.502 17.99 17.99 0 0 1 8.13-12.052l26.081-16.623a19 19 0 0 1 5.3-2.329 20.72 20.72 0 0 1 22.237 8.243 19.17 19.17 0 0 1 3.277 14.503 18 18 0 0 1-.624 2.435l-.49 1.498-1.337-.98a33.6 33.6 0 0 0-10.203-5.1l-.97-.294.09-.968a5.86 5.86 0 0 0-1.052-3.878 6.24 6.24 0 0 0-6.696-2.485 5.8 5.8 0 0 0-1.602.704L37.73 51.72a5.42 5.42 0 0 0-2.449 3.63 5.79 5.79 0 0 0 .986 4.372 6.24 6.24 0 0 0 6.698 2.486 5.8 5.8 0 0 0 1.602-.704l9.952-6.342a19 19 0 0 1 5.295-2.328 20.72 20.72 0 0 1 22.237 8.242 19.17 19.17 0 0 1 3.277 14.503 18 18 0 0 1-8.13 12.053l-26.081 16.622a19 19 0 0 1-5.3 2.328" style="fill:#fff"/></svg>
+</file>
+
+<file path="src/lib/components/dictionary/DefinitionList.svelte">
+<script lang="ts">
+  import type { Meaning } from '$lib/types/dictionary';
+
+  interface Props {
+    meanings: Meaning[];
+    onSelectWord?: (word: string) => void;
+  }
+
+  let { meanings, onSelectWord }: Props = $props();
+</script>
+
+<div class="space-y-10 font-serif">
+  {#each meanings as meaning}
+    <section class="space-y-4">
+      <div class="flex items-center gap-4">
+        <h2 class="text-xl md:text-2xl italic font-bold text-stone-900 capitalize font-serif">
+          {meaning.partOfSpeech}
+        </h2>
+        <div class="h-[1px] flex-grow bg-stone-300"></div>
+      </div>
+
+      <div class="space-y-3 pl-2">
+        <h3 class="text-xs uppercase font-sans tracking-widest font-bold text-stone-500">
+          Meaning
+        </h3>
+
+        <ol class="space-y-4 list-decimal list-inside text-stone-800 leading-relaxed text-lg">
+          {#each meaning.definitions as def}
+            <li class="align-top marker:text-stone-400 marker:font-bold">
+              <span class="text-stone-900">{def.definition}</span>
+
+              {#if def.example}
+                <p class="text-stone-600 text-base italic mt-1 pl-6 border-l-2 border-stone-300">
+                  "{def.example}"
+                </p>
+              {/if}
+            </li>
+          {/each}
+        </ol>
+      </div>
+
+      {#if meaning.synonyms.length > 0}
+        <div class="flex flex-wrap items-center gap-2 pt-2 text-sm">
+          <span class="font-sans text-xs font-bold uppercase tracking-wider text-stone-500">
+            Synonyms:
+          </span>
+          {#each meaning.synonyms as synonym}
+            <button
+              type="button"
+              onclick={() => onSelectWord?.(synonym)}
+              class="text-stone-900 font-medium underline underline-offset-4 decoration-stone-400 hover:decoration-stone-900 hover:bg-stone-200/50 px-1.5 py-0.5 rounded transition-all"
+            >
+              {synonym}
+            </button>
+          {/each}
+        </div>
+      {/if}
+
+      {#if meaning.antonyms.length > 0}
+        <div class="flex flex-wrap items-center gap-2 pt-1 text-sm">
+          <span class="font-sans text-xs font-bold uppercase tracking-wider text-stone-500">
+            Antonyms:
+          </span>
+          {#each meaning.antonyms as antonym}
+            <button
+              type="button"
+              onclick={() => onSelectWord?.(antonym)}
+              class="text-stone-900 font-medium underline underline-offset-4 decoration-stone-400 hover:decoration-stone-900 hover:bg-stone-200/50 px-1.5 py-0.5 rounded transition-all"
+            >
+              {antonym}
+            </button>
+          {/each}
+        </div>
+      {/if}
+    </section>
+  {/each}
+</div>
+</file>
+
+<file path="src/lib/components/dictionary/PhoneticBadge.svelte">
+<script lang="ts">
+  import type { Phonetic } from '$lib/types/dictionary';
+  import AudioPlayer from '$lib/components/ui/AudioPlayer.svelte';
+
+  interface Props {
+    phonetic: Phonetic;
+    word?: string;
+  }
+
+  let { phonetic, word = '' }: Props = $props();
+
+  let regionLabel = $derived.by(() => {
+    if (!phonetic.audio) return '';
+    if (phonetic.audio.includes('-us.mp3') || phonetic.audio.includes('/us/')) return 'US';
+    if (phonetic.audio.includes('-uk.mp3') || phonetic.audio.includes('/uk/')) return 'UK';
+    if (phonetic.audio.includes('-au.mp3') || phonetic.audio.includes('/au/')) return 'AU';
+    return '';
+  });
+</script>
+
+{#if phonetic.text || phonetic.audio}
+  <div class="inline-flex items-center gap-2 px-3 py-1.5 border border-stone-300 rounded-full bg-[#FAF8F5] text-stone-800 text-sm font-serif">
+    {#if regionLabel}
+      <span class="text-[10px] font-sans font-bold tracking-widest uppercase text-stone-500 border-r border-stone-300 pr-2">
+        {regionLabel}
+      </span>
+    {/if}
+
+    {#if phonetic.text}
+      <span class="tracking-wide font-serif text-stone-800">{phonetic.text}</span>
+    {/if}
+
+    {#if phonetic.audio || word}
+      <AudioPlayer audioUrl={phonetic.audio} {word} label={`Play pronunciation ${phonetic.text || ''}`} />
+    {/if}
+  </div>
+{/if}
+</file>
+
+<file path="src/lib/components/dictionary/SearchBar.svelte">
+<script lang="ts">
+  import Input from '$lib/components/ui/Input.svelte';
+  import Button from '$lib/components/ui/Button.svelte';
+
+  interface Props {
+    searchTerm?: string;
+    isLoading?: boolean;
+    onSearch: (word: string) => void;
+  }
+
+  let { searchTerm = '', isLoading = false, onSearch }: Props = $props();
+
+  let query = $state('');
+
+  $effect(() => {
+    query = searchTerm;
+  });
+
+  function handleSubmit(e: SubmitEvent) {
+    e.preventDefault();
+    if (query.trim()) {
+      onSearch(query.trim());
+    }
+  }
+</script>
+
+<form onsubmit={handleSubmit} class="w-full max-w-2xl mx-auto flex flex-col sm:flex-row gap-3 items-end">
+  <div class="w-full">
+    <Input
+      bind:value={query}
+      placeholder="Type a word to look up..."
+      hint="Press Enter or click Search to define."
+    />
+  </div>
+
+  <Button type="submit" variant="editorial" size="lg" {isLoading} class="whitespace-nowrap w-full sm:w-auto h-[54px] mb-[2px]">
+    Lookup
+  </Button>
+</form>
+</file>
+
+<file path="src/lib/components/dictionary/WordHeader.svelte">
+<script lang="ts">
+  import type { WordData } from '$lib/types/dictionary';
+  import PhoneticBadge from './PhoneticBadge.svelte';
+  import AudioPlayer from '$lib/components/ui/AudioPlayer.svelte';
+
+  interface Props {
+    wordData: WordData;
+  }
+
+  let { wordData }: Props = $props();
+
+  let primaryAudio = $derived.by(() => {
+    const audioPhonetic = wordData.phonetics.find((p) => p.audio && p.audio.length > 0);
+    return audioPhonetic ? audioPhonetic.audio : '';
+  });
+</script>
+
+<header class="border-b-2 border-stone-900 pb-8 mb-8 font-serif">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div>
+      <h1 class="text-5xl md:text-7xl font-normal text-stone-900 tracking-tight capitalize">
+        {wordData.word}
+      </h1>
+
+      {#if wordData.phonetic}
+        <p class="text-xl md:text-2xl text-stone-600 mt-2 font-serif italic">
+          {wordData.phonetic}
+        </p>
+      {/if}
+    </div>
+
+    <div class="flex items-center gap-3 bg-[#F4F1EA] p-4 rounded-lg border border-stone-300">
+      <AudioPlayer audioUrl={primaryAudio} word={wordData.word} label={`Listen to ${wordData.word}`} />
+      <span class="text-xs uppercase font-sans font-semibold tracking-wider text-stone-600">
+        Audio Pronunciation
+      </span>
+    </div>
+  </div>
+
+  {#if wordData.phonetics.length > 0}
+    <div class="flex flex-wrap items-center gap-2 mt-6">
+      {#each wordData.phonetics as phonetic}
+        <PhoneticBadge {phonetic} word={wordData.word} />
+      {/each}
+    </div>
+  {/if}
+</header>
+</file>
+
+<file path="src/lib/components/ui/AudioPlayer.svelte">
+<script lang="ts">
+  import { onDestroy } from 'svelte';
+  import { AudioController } from '$lib/utils/audio';
+
+  interface Props {
+    audioUrl?: string;
+    word?: string;
+    label?: string;
+  }
+
+  let { audioUrl = '', word = '', label = 'Play pronunciation audio' }: Props = $props();
+
+  let isPlaying = $state(false);
+  let isLoading = $state(false);
+  let errorMessage = $state<string | null>(null);
+
+  const controller = new AudioController((playing, loading, error) => {
+    isPlaying = playing;
+    isLoading = loading;
+    errorMessage = error;
+  });
+
+  async function togglePlay() {
+    if (!audioUrl && !word) {
+      errorMessage = 'No audio source provided';
+      return;
+    }
+
+    if (isPlaying) {
+      controller.stop();
+    } else {
+      try {
+        await controller.play(audioUrl, word);
+      } catch (e) {
+        // Handled inside AudioController callback
+      }
+    }
+  }
+
+  onDestroy(() => {
+    controller.destroy();
+  });
+</script>
+
+<div class="inline-flex items-center gap-3 font-serif">
+  <button
+    type="button"
+    onclick={togglePlay}
+    disabled={!audioUrl || isLoading}
+    aria-label={label}
+    title={audioUrl ? label : 'No audio available'}
+    class={`relative flex items-center justify-center w-12 h-12 rounded-full border border-stone-900 bg-[#FDFBF7] text-stone-900 transition-all duration-200 hover:bg-stone-900 hover:text-[#FDFBF7] disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-stone-900 focus:ring-offset-2 ${
+      isPlaying ? 'bg-stone-900 text-[#FDFBF7]' : ''
+    }`}
+  >
+    {#if isLoading}
+      <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+      </svg>
+    {:else if isPlaying}
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <rect x="6" y="4" width="4" height="16" rx="1" />
+        <rect x="14" y="4" width="4" height="16" rx="1" />
+      </svg>
+    {:else}
+      <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M8 5v14l11-7z" />
+      </svg>
+    {/if}
+  </button>
+
+  {#if isPlaying}
+    <div class="flex items-center gap-1 h-4" aria-live="polite">
+      <span class="w-1 h-full bg-stone-900 animate-pulse"></span>
+      <span class="w-1 h-3/4 bg-stone-900 animate-pulse delay-75"></span>
+      <span class="w-1 h-1/2 bg-stone-900 animate-pulse delay-150"></span>
+    </div>
+  {/if}
+
+  {#if errorMessage}
+    <span class="text-xs text-red-700 italic">{errorMessage}</span>
+  {/if}
+</div>
+</file>
+
+<file path="src/lib/components/ui/Button.svelte">
+<script lang="ts">
+  import type { Snippet } from 'svelte';
+  import type { HTMLButtonAttributes } from 'svelte/elements';
+
+  type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'editorial';
+  type Size = 'sm' | 'md' | 'lg' | 'icon';
+
+  interface Props extends HTMLButtonAttributes {
+    variant?: Variant;
+    size?: Size;
+    isLoading?: boolean;
+    children?: Snippet;
+  }
+
+  let {
+    variant = 'editorial',
+    size = 'md',
+    isLoading = false,
+    disabled = false,
+    type = 'button',
+    class: className = '',
+    children,
+    ...restProps
+  }: Props = $props();
+
+  const variantStyles: Record<Variant, string> = {
+    primary: 'bg-stone-900 text-stone-50 hover:bg-stone-800 active:bg-stone-950 border border-stone-900',
+    secondary: 'bg-stone-200 text-stone-900 hover:bg-stone-300 active:bg-stone-400 border border-stone-300',
+    outline: 'bg-transparent text-stone-900 border border-stone-400 hover:border-stone-900 hover:bg-stone-100/50',
+    ghost: 'bg-transparent text-stone-700 hover:text-stone-900 hover:bg-stone-200/50 border border-transparent',
+    editorial: 'bg-[#FDFBF7] text-stone-900 border border-stone-900 hover:bg-stone-900 hover:text-stone-50 transition-colors duration-200 font-serif'
+  };
+
+  const sizeStyles: Record<Size, string> = {
+    sm: 'text-xs px-2.5 py-1.5 gap-1.5',
+    md: 'text-sm px-4 py-2 gap-2',
+    lg: 'text-base px-6 py-3 gap-2.5',
+    icon: 'p-2 aspect-square flex items-center justify-center'
+  };
+</script>
+
+<button
+  {type}
+  disabled={disabled || isLoading}
+  class={`inline-flex items-center justify-center font-medium tracking-wide transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-900 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+  {...restProps}
+>
+  {#if isLoading}
+    <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+  {/if}
+  {#if children}
+    {@render children()}
+  {/if}
+</button>
+</file>
+
+<file path="src/lib/components/ui/Input.svelte">
+<script lang="ts">
+  import type { HTMLInputAttributes } from 'svelte/elements';
+
+  interface Props extends HTMLInputAttributes {
+    value?: string;
+    label?: string;
+    error?: string;
+    hint?: string;
+    onclear?: () => void;
+  }
+
+  let {
+    value = $bindable(''),
+    label,
+    error,
+    hint,
+    placeholder = 'Search for any word...',
+    id = `input-${Math.random().toString(36).substring(2, 9)}`,
+    class: className = '',
+    onclear,
+    ...restProps
+  }: Props = $props();
+
+  let inputElement = $state<HTMLInputElement | null>(null);
+
+  function handleClear() {
+    value = '';
+    onclear?.();
+    inputElement?.focus();
+  }
+
+  function handleKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Escape' && value) {
+      handleClear();
+    }
+  }
+</script>
+
+<div class="w-full flex flex-col gap-1.5 font-serif">
+  {#if label}
+    <label for={id} class="text-xs tracking-wider uppercase text-stone-600 font-semibold">
+      {label}
+    </label>
+  {/if}
+
+  <div class="relative flex items-center w-full">
+    <div class="absolute left-4 pointer-events-none text-stone-400">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+    </div>
+
+    <input
+      {id}
+      bind:this={inputElement}
+      bind:value
+      {placeholder}
+      onkeydown={handleKeyDown}
+      class={`w-full bg-[#FDFBF7] text-stone-900 placeholder:text-stone-400 placeholder:italic font-serif text-lg md:text-xl pl-12 pr-12 py-3.5 border-b-2 border-stone-900 focus:outline-none focus:border-stone-900 focus:ring-0 transition-colors ${
+        error ? 'border-red-700' : 'border-stone-900'
+      } ${className}`}
+      {...restProps}
+    />
+
+    {#if value}
+      <button
+        type="button"
+        onclick={handleClear}
+        aria-label="Clear input search text"
+        class="absolute right-4 p-1 text-stone-400 hover:text-stone-900 transition-colors focus:outline-none"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    {/if}
+  </div>
+
+  {#if error}
+    <p class="text-xs text-red-700 italic mt-1">{error}</p>
+  {:else if hint}
+    <p class="text-xs text-stone-500 italic mt-1">{hint}</p>
+  {/if}
+</div>
+</file>
+
+<file path="src/lib/services/dictionaryApi.ts">
+import type { WordData, ApiError } from '$lib/types/dictionary';
+
+const API_BASE_URL = 'https://api.dictionaryapi.dev/api/v2/entries/en';
+
+export class DictionaryService {
+  public static async fetchWord(word: string): Promise<WordData[]> {
+    const sanitizedWord = word.trim().toLowerCase();
+    
+    if (!sanitizedWord) {
+      throw new Error('Please enter a word to search.');
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/${encodeURIComponent(sanitizedWord)}`);
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          const errorData: ApiError = await response.json().catch(() => ({
+            title: 'No Definitions Found',
+            message: `Sorry, we couldn't find definitions for "${word}".`,
+            resolution: 'You can try searching again or check for spelling errors.'
+          }));
+          throw new Error(errorData.message || `No definition found for "${word}".`);
+        }
+        throw new Error(`Server returned HTTP state ${response.status}`);
+      }
+
+      const rawData: WordData[] = await response.json();
+      return this.transformData(rawData);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        throw err;
+      }
+      throw new Error('An unexpected network error occurred while fetching definition.');
+    }
+  }
+
+  private static transformData(data: WordData[]): WordData[] {
+    return data.map((entry) => ({
+      ...entry,
+      phonetics: entry.phonetics.filter((p) => p.text || p.audio),
+      meanings: entry.meanings.map((meaning) => ({
+        ...meaning,
+        synonyms: Array.from(new Set(meaning.synonyms || [])),
+        antonyms: Array.from(new Set(meaning.antonyms || [])),
+        definitions: meaning.definitions.map((def) => ({
+          ...def,
+          synonyms: Array.from(new Set(def.synonyms || [])),
+          antonyms: Array.from(new Set(def.antonyms || []))
+        }))
+      }))
+    }));
+  }
+}
+</file>
+
+<file path="src/lib/types/dictionary.ts">
+export interface License {
+  name: string;
+  url: string;
+}
+
+export interface Phonetic {
+  text?: string;
+  audio?: string;
+  sourceUrl?: string;
+  license?: License;
+}
+
+export interface Definition {
+  definition: string;
+  example?: string;
+  synonyms: string[];
+  antonyms: string[];
+}
+
+export interface Meaning {
+  partOfSpeech: string;
+  definitions: Definition[];
+  synonyms: string[];
+  antonyms: string[];
+}
+
+export interface WordData {
+  word: string;
+  phonetic?: string;
+  phonetics: Phonetic[];
+  meanings: Meaning[];
+  license?: License;
+  sourceUrls: string[];
+  etymology?: string;
+}
+
+export interface ApiError {
+  title: string;
+  message: string;
+  resolution: string;
+}
+
+export type SearchStatus = 'idle' | 'loading' | 'success' | 'error';
+
+export type FontOption = 'serif' | 'sans' | 'mono';
+
+export interface AudioState {
+  isPlaying: boolean;
+  isLoading: boolean;
+  error: string | null;
+  progress: number;
+}
+</file>
+
+<file path="src/lib/utils/audio.ts">
+export class AudioController {
+  private audio: HTMLAudioElement | null = null;
+  private onStateChange: ((isPlaying: boolean, isLoading: boolean, error: string | null) => void) | null = null;
+
+  constructor(onStateChange?: (isPlaying: boolean, isLoading: boolean, error: string | null) => void) {
+    this.onStateChange = onStateChange || null;
+  }
+
+  public play(url: string, wordText?: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.stop();
+
+      if (!url && wordText) {
+        return this.speakText(wordText, resolve, reject);
+      }
+
+      if (!url) {
+        const errorMsg = 'No audio source available.';
+        this.notify(false, false, errorMsg);
+        return reject(new Error(errorMsg));
+      }
+
+      this.notify(false, true, null);
+      this.audio = new Audio(url);
+
+      this.audio.oncanplaythrough = () => {
+        this.audio?.play()
+          .then(() => {
+            this.notify(true, false, null);
+            resolve();
+          })
+          .catch(() => {
+            if (wordText) {
+              this.speakText(wordText, resolve, reject);
+            } else {
+              const errorMsg = 'Failed to play audio.';
+              this.notify(false, false, errorMsg);
+              reject(new Error(errorMsg));
+            }
+          });
+      };
+
+      this.audio.onended = () => {
+        this.notify(false, false, null);
+      };
+
+      this.audio.onerror = () => {
+        this.audio = null;
+        if (wordText && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+          this.speakText(wordText, resolve, reject);
+        } else {
+          const errorMsg = 'Unable to load remote audio.';
+          this.notify(false, false, errorMsg);
+          reject(new Error(errorMsg));
+        }
+      };
+    });
+  }
+
+  private speakText(text: string, resolve: () => void, reject: (reason?: unknown) => void): void {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      const errorMsg = 'Speech synthesis unavailable.';
+      this.notify(false, false, errorMsg);
+      return reject(new Error(errorMsg));
+    }
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.9;
+
+    utterance.onstart = () => {
+      this.notify(true, false, null);
+    };
+
+    utterance.onend = () => {
+      this.notify(false, false, null);
+      resolve();
+    };
+
+    utterance.onerror = (e) => {
+      this.notify(false, false, 'Speech synthesis error.');
+      reject(e);
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }
+
+  public stop(): void {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    if (this.audio) {
+      this.audio.pause();
+      this.audio.currentTime = 0;
+      this.audio = null;
+    }
+    this.notify(false, false, null);
+  }
+
+  private notify(isPlaying: boolean, isLoading: boolean, error: string | null): void {
+    if (this.onStateChange) {
+      this.onStateChange(isPlaying, isLoading, error);
+    }
+  }
+
+  public destroy(): void {
+    this.stop();
+    this.onStateChange = null;
+  }
+}
+</file>
+
+<file path="src/lib/index.ts">
+// place files you want to import through the `$lib` alias in this folder.
+</file>
+
+<file path="src/routes/api/dictionary/+server.ts">
+import { json, type RequestHandler } from '@sveltejs/kit';
+import { DictionaryService } from '$lib/services/dictionaryApi';
+
+export const GET: RequestHandler = async ({ url }) => {
+  const query = url.searchParams.get('q');
+
+  if (!query) {
+    return json({ error: 'Query parameter "q" is required.' }, { status: 400 });
+  }
+
+  try {
+    const data = await DictionaryService.fetchWord(query);
+    return json(data, {
+      headers: {
+        'Cache-Control': 'public, max-age=86400, s-maxage=86400'
+      }
+    });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Failed to fetch definition';
+    return json({ error: message }, { status: 404 });
+  }
+};
+</file>
+
+<file path="src/routes/+layout.svelte">
+<script lang="ts">
+  import '../app.css';
+  import type { Snippet } from 'svelte';
+
+  interface Props {
+    children?: Snippet;
+  }
+
+  let { children }: Props = $props();
+</script>
+
+<svelte:head>
+  <title>The Dictionary — Editorial Reference</title>
+  <meta name="description" content="A clean, editorial dictionary application with audio pronunciations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap" rel="stylesheet">
+</svelte:head>
+
+<div class="min-h-screen bg-[#FDFBF7] text-stone-900 font-serif selection:bg-stone-900 selection:text-stone-50 flex flex-col">
+  <header class="border-b border-stone-900/10 py-6 px-4 sm:px-8">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <a href="/" class="group flex items-center gap-3">
+        <span class="text-2xl font-bold tracking-tight text-stone-900 group-hover:italic transition-all">
+          The Dictionary.
+        </span>
+      </a>
+
+      <span class="text-xs font-sans uppercase tracking-widest text-stone-500 font-semibold border border-stone-300 px-2.5 py-1 rounded-full">
+        Audio Edition
+      </span>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-4xl w-full mx-auto px-4 sm:px-8 py-8 md:py-12">
+    {#if children}
+      {@render children()}
+    {/if}
+  </main>
+
+  <footer class="border-t border-stone-900/10 py-8 px-4 sm:px-8 mt-16 text-center text-xs text-stone-500 font-sans tracking-wider uppercase">
+    <p>© 2026 The Dictionary — Editorial Typography & Pronunciation Audio Guide</p>
+  </footer>
+</div>
+</file>
+
+<file path="src/routes/+page.svelte">
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import type { WordData, SearchStatus } from '$lib/types/dictionary';
+  import SearchBar from '$lib/components/dictionary/SearchBar.svelte';
+  import WordHeader from '$lib/components/dictionary/WordHeader.svelte';
+  import DefinitionList from '$lib/components/dictionary/DefinitionList.svelte';
+
+  let currentWord = $state('ephemeral');
+  let wordData = $state<WordData | null>(null);
+  let status = $state<SearchStatus>('idle');
+  let errorMessage = $state<string | null>(null);
+  let searchHistory = $state<string[]>([]);
+
+  async function handleSearch(term: string) {
+    if (!term.trim()) return;
+
+    status = 'loading';
+    errorMessage = null;
+    currentWord = term.trim().toLowerCase();
+
+    try {
+      const response = await fetch(`/api/dictionary?q=${encodeURIComponent(currentWord)}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `No definitions found for "${currentWord}".`);
+      }
+
+      const results: WordData[] = await response.json();
+      if (results && results.length > 0) {
+        wordData = results[0];
+        status = 'success';
+        updateHistory(currentWord);
+      } else {
+        throw new Error(`No definition results found for "${currentWord}".`);
+      }
+    } catch (err: unknown) {
+      status = 'error';
+      wordData = null;
+      errorMessage = err instanceof Error ? err.message : 'An error occurred during lookup.';
+    }
+  }
+
+  function updateHistory(word: string) {
+    const filtered = searchHistory.filter((item) => item !== word);
+    searchHistory = [word, ...filtered].slice(0, 5);
+  }
+
+  onMount(() => {
+    handleSearch(currentWord);
+  });
+</script>
+
+<div class="space-y-10">
+  <section aria-label="Word Search">
+    <SearchBar searchTerm={currentWord} isLoading={status === 'loading'} onSearch={handleSearch} />
+
+    {#if searchHistory.length > 0}
+      <div class="max-w-2xl mx-auto mt-4 flex items-center gap-2 flex-wrap font-sans text-xs">
+        <span class="text-stone-500 font-semibold uppercase tracking-wider">Recent:</span>
+        {#each searchHistory as item}
+          <button
+            type="button"
+            onclick={() => handleSearch(item)}
+            class="px-2 py-0.5 border border-stone-300 rounded bg-[#FAF8F5] hover:border-stone-900 transition-colors capitalize text-stone-700"
+          >
+            {item}
+          </button>
+        {/each}
+      </div>
+    {/if}
+  </section>
+
+  {#if status === 'loading'}
+    <div class="py-16 text-center font-serif space-y-4">
+      <div class="inline-block animate-spin w-8 h-8 border-2 border-stone-900 border-t-transparent rounded-full" role="status">
+        <span class="sr-only">Searching definitions...</span>
+      </div>
+      <p class="text-stone-600 italic">Consulting the editorial lexicon...</p>
+    </div>
+  {:else if status === 'error'}
+    <div class="p-8 border border-red-900/20 bg-red-50/50 rounded-lg text-center font-serif max-w-2xl mx-auto space-y-3">
+      <h2 class="text-2xl text-stone-900 font-normal">Definition Unavailable</h2>
+      <p class="text-stone-700">{errorMessage}</p>
+    </div>
+  {:else if status === 'success' && wordData}
+    <article class="space-y-8">
+      <WordHeader {wordData} />
+
+      <DefinitionList meanings={wordData.meanings} onSelectWord={handleSearch} />
+
+      {#if wordData.sourceUrls && wordData.sourceUrls.length > 0}
+        <footer class="pt-8 border-t border-stone-300 font-sans text-xs text-stone-500 space-y-1">
+          <p class="uppercase font-semibold tracking-wider">Source Reference</p>
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+            {#each wordData.sourceUrls as url}
+              <a href={url} target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:text-stone-900 break-all">
+                {url}
+              </a>
+            {/each}
+          </div>
+        </footer>
+      {/if}
+    </article>
+  {/if}
+</div>
+</file>
+
+<file path="src/app.d.ts">
+// See https://svelte.dev/docs/kit/types#app.d.ts
+// for information about these interfaces
+declare global {
+	namespace App {
+		// interface Error {}
+		// interface Locals {}
+		// interface PageData {}
+		// interface PageState {}
+		// interface Platform {}
+	}
+}
+
+export {};
+</file>
+
+<file path="src/app.html">
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="text-scale" content="scale" />
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>
+</file>
+
+<file path="static/robots.txt">
+# allow crawling everything by default
+User-agent: *
+Disallow:
+</file>
+
+<file path=".gitignore">
+node_modules
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+</file>
+
+<file path=".npmrc">
+engine-strict=true
+</file>
+
+<file path="package.json">
+{
+	"name": "dictionary-app",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^7.0.1",
+		"@sveltejs/adapter-vercel": "^6.3.4",
+		"@sveltejs/kit": "^2.63.0",
+		"@sveltejs/vite-plugin-svelte": "^7.1.2",
+		"@tailwindcss/vite": "^4.3.3",
+		"svelte": "^5.56.1",
+		"svelte-check": "^4.6.0",
+		"tailwindcss": "^4.3.3",
+		"typescript": "^6.0.3",
+		"vite": "^8.0.16"
+	}
+}
+</file>
+
+<file path="README.md">
+# sv
+
+Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+
+## Creating a project
+
+If you're seeing this, you've probably already done this step. Congrats!
+
+```sh
+# create a new project
+npx sv create my-app
+```
+
+To recreate this project with the same configuration:
+
+```sh
+# recreate this project
+npx sv@0.17.0 create --template minimal --types ts --install npm dictionary-app
+```
+
+## Developing
+
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+
+```sh
+npm run dev
+
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+```
+
+## Building
+
+To create a production version of your app:
+
+```sh
+npm run build
+```
+
+You can preview the production build with `npm run preview`.
+
+> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+</file>
+
+<file path="svelte.config.js">
+import adapter from '@sveltejs/adapter-vercel';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
+	preprocess: vitePreprocess(),
+	kit: {
+		adapter: adapter({
+			runtime: 'nodejs20.x'
+		})
+	}
+};
+
+export default config;
+</file>
+
+<file path="tsconfig.json">
+{
+	"extends": "./.svelte-kit/tsconfig.json",
+	"compilerOptions": {
+		"rewriteRelativeImportExtensions": true,
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true,
+		"moduleResolution": "bundler"
+	}
+	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
+	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files
+	//
+	// To make changes to top-level options such as include and exclude, we recommend extending
+	// the generated config; see https://svelte.dev/docs/kit/configuration#typescript
+}
+</file>
+
+<file path="vite.config.ts">
+import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+	plugins: [tailwindcss(), sveltekit()]
+});
+</file>
+
+</files>
